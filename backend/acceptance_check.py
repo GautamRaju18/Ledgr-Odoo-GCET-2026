@@ -126,8 +126,13 @@ assert on_hand()["WH/Production Rack"] == 77
 # 6
 p = op("delivery", ["todo"], 500, source_location_id=loc["WH/Production Rack"])
 assert p["status"] == "waiting" and p["lines"][0]["available"] is False
-# 7 move history
+# 7 move history: planned (open) lines first, then the done ledger
 moves = ok(c.get("/api/moves"))
+assert [(m["reference"], m["direction"], m["status"]) for m in moves[:2]] == [
+    ("WH/OUT/0002", "out", "waiting"),
+    ("WH/ADJ/0001", "out", "done"),
+], moves
+moves = [m for m in moves if m["status"] == "done"]
 assert [(m["reference"], m["direction"]) for m in moves] == [
     ("WH/ADJ/0001", "out"),
     ("WH/OUT/0001", "out"),
