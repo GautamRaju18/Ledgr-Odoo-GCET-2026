@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { LayoutGrid, List } from 'lucide-react'
 import { useState } from 'react'
 import { moves } from '../../api/resources'
-import { OPERATION_TYPES, cx, fmtQty } from '../../components/common/format'
+import { OPERATION_TYPES, cx, fmtDate, fmtQty } from '../../components/common/format'
 import { Badge, Loading, PageHeader, SearchInput, Select, Table } from '../../components/common/ui'
+import { STATUS } from '../operations/kinds'
 
 // Incoming stock green, outgoing red.
 const DIRECTION = {
@@ -12,8 +13,11 @@ const DIRECTION = {
   internal: { label: 'Internal', row: '', tone: 'blue', sign: '' },
 }
 
-const fmtDateTime = (d) => new Date(d).toLocaleString()
+// Done rows are real stock moves (with a time); open rows are planned, shown by schedule date.
+const BOARD = ['draft', 'waiting', 'ready', 'done']
+const when = (m) => (m.status === 'done' ? new Date(m.date).toLocaleString() : fmtDate(m.date))
 const qty = (m) => `${DIRECTION[m.direction].sign}${fmtQty(m.quantity)} ${m.uom}`
+const statusBadge = (m) => <Badge tone={STATUS[m.status].tone}>{STATUS[m.status].label}</Badge>
 
 export default function MoveHistory() {
   const [search, setSearch] = useState('')
@@ -27,13 +31,13 @@ export default function MoveHistory() {
 
   const columns = [
     { key: 'reference', label: 'Reference', className: 'font-medium' },
-    { key: 'date', label: 'Date', render: (m) => fmtDateTime(m.date) },
+    { key: 'date', label: 'Date', render: when },
     { key: 'partner_name', label: 'Contact' },
     { key: 'from_location', label: 'From' },
     { key: 'to_location', label: 'To' },
     { key: 'product_name', label: 'Product' },
     { key: 'quantity', label: 'Quantity', className: 'font-medium', render: qty },
-    { key: 'status', label: 'Status', render: () => <Badge tone="green">Done</Badge> },
+    { key: 'status', label: 'Status', render: statusBadge },
   ]
 
   return (
@@ -70,18 +74,18 @@ export default function MoveHistory() {
           rows={data}
           loading={isLoading}
           rowClassName={(m) => DIRECTION[m.direction].row}
-          empty="No stock moves yet"
+          empty="No moves yet"
         />
       ) : isLoading ? (
         <Loading />
       ) : (
         <div className="flex gap-3 overflow-x-auto pb-2">
-          {Object.entries(DIRECTION).map(([direction, d]) => {
-            const cards = data.filter((m) => m.direction === direction)
+          {BOARD.map((status) => {
+            const cards = data.filter((m) => m.status === status)
             return (
-              <div key={direction} className="w-72 shrink-0 rounded-lg bg-slate-100 p-2">
+              <div key={status} className="w-72 shrink-0 rounded-lg bg-slate-100 p-2">
                 <div className="mb-2 flex justify-between px-1 text-sm font-medium text-slate-600">
-                  {d.label}
+                  {STATUS[status].label}
                   <span className="text-slate-400">{cards.length}</span>
                 </div>
                 <div className="space-y-2">
@@ -92,11 +96,11 @@ export default function MoveHistory() {
                     >
                       <div className="flex justify-between">
                         <span className="font-medium">{m.reference}</span>
-                        <Badge tone={d.tone}>{qty(m)}</Badge>
+                        <Badge tone={DIRECTION[m.direction].tone}>{qty(m)}</Badge>
                       </div>
                       <div className="text-slate-600">{m.product_name}</div>
                       <div className="text-xs text-slate-400">
-                        {m.from_location} → {m.to_location}
+                        {m.from_location} → {m.to_location} · {when(m)}
                       </div>
                     </div>
                   ))}
