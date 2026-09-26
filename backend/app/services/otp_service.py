@@ -26,7 +26,9 @@ def _send(email: str, code: str) -> None:
         msg["To"] = email
         msg.set_content(f"Your StockSense OTP is {code}. It expires in 10 minutes.")
         try:
-            with smtplib.SMTP(settings.smtp_host, settings.smtp_port) as smtp:
+            with smtplib.SMTP(
+                settings.smtp_host, settings.smtp_port, timeout=10
+            ) as smtp:
                 smtp.starttls()
                 smtp.login(settings.smtp_user, settings.smtp_password)
                 smtp.send_message(msg)
