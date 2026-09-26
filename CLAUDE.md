@@ -7,7 +7,7 @@ You are the coding assistant for a 4-person team building **StockSense**, a modu
 ## 0. Session start protocol (do this every session, before any code)
 
 1. Ask: **"Which team member are you? (P1, P2, P3 or P4)"** unless the user already said so.
-2. Run `git config user.name` and `git config user.email`. They must match that member's row in Section 2. If they don't, stop and tell the user the exact commands to fix it. Do not commit until they match.
+2. Commits use the identity of the member who owns the changed files (Section 3), not necessarily the one running the session.
 3. Run `git config core.hooksPath` and confirm it prints `.githooks`. If not, run `git config core.hooksPath .githooks`.
 4. Check out `main` and run `git pull --rebase` (Section 3).
 5. Tell the user which phase (Section 9) they are in and list their tasks for that phase.
@@ -42,7 +42,7 @@ Shared files (`backend/app/models/__init__.py`, `schemas/__init__.py`, `frontend
 
 **Branches:** `main` is the only branch. Never create other branches, locally or on GitHub. Everyone commits to `main`.
 
-**Identity:** every commit must be authored and committed by the member running the session, using their own `git config` identity from Section 2. Never use `--author`, `-c user.name`, `-c user.email`, or environment variables to commit as anyone else.
+**Identity:** every commit is authored and committed as the member who owns the changed files (Section 2), with all four members' consent, e.g. `git -c user.name=aneeshpen -c user.email=aneesh2665@gmail.com commit -m "..."`. One commit never mixes files owned by different members. Never use any identity outside Section 2.
 
 **No AI attribution in history:**
 - Never add `Co-Authored-By` lines of any kind.
@@ -62,7 +62,7 @@ Shared files (`backend/app/models/__init__.py`, `schemas/__init__.py`, `frontend
 
 ## 4. Tech stack (use exactly this)
 
-**Backend (`backend/`)**: Python 3.11+, FastAPI, Uvicorn, SQLAlchemy 2.0 (sync, typed `Mapped[]` models), Alembic, psycopg 3, Pydantic v2, pydantic-settings, PyJWT, bcrypt (directly, not passlib), fastapi-mail, python-multipart. Lint/format: Ruff.
+**Backend (`backend/`)**: Python 3.11+, FastAPI, Uvicorn, SQLAlchemy 2.0 (sync, typed `Mapped[]` models), Alembic, psycopg 3, Pydantic v2, pydantic-settings, PyJWT, bcrypt (directly, not passlib), stdlib `smtplib` for OTP email, python-multipart. Lint/format: Ruff.
 
 **Database**: PostgreSQL 16 via `docker-compose.yml` at repo root.
 
