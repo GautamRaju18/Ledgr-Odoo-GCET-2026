@@ -17,9 +17,9 @@ def check_password(value: str) -> str:
     return value
 
 
-# bcrypt only hashes the first 72 bytes, so cap the length.
+# More than 8 characters (mockup rule); bcrypt only hashes 72 bytes, so cap it.
 Password = Annotated[
-    str, Field(min_length=8, max_length=72), AfterValidator(check_password)
+    str, Field(min_length=9, max_length=72), AfterValidator(check_password)
 ]
 
 
