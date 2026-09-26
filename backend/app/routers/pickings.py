@@ -1,18 +1,19 @@
+from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from app.deps import get_current_user, get_db
-from app.models.picking import Picking, PickingStatus, PickingType
-from app.models.user import User
+from app.deps import DB, CurrentUser, get_current_user
+from app.models.location import Location
+from app.models.partner import Partner
+from app.models.picking import Picking, PickingLine, PickingStatus, PickingType
+from app.models.product import Product
 from app.services import stock_engine as engine
-
-DB = Annotated[Session, Depends(get_db)]
 
 router = APIRouter(
     prefix="/pickings", tags=["pickings"], dependencies=[Depends(get_current_user)]
@@ -64,6 +65,63 @@ class PickingOut(BaseModel):
     lines: list[LineOut]
 
 
+@dataclass
+class PickingFilters:
+    """Query-string filters shared by operations lists, move history and dashboard."""
+
+    type: PickingType | None = None
+    status: PickingStatus | None = None
+    warehouse_id: int | None = None
+    location_id: int | None = None
+    category_id: int | None = None
+    search: str | None = None  # reference or contact name
+
+    def apply(self, query):
+        if self.type:
+            query = query.where(Picking.type == self.type)
+        if self.status:
+            query = query.where(Picking.status == self.status)
+        if self.location_id:
+            query = query.where(
+                or_(
+                    Picking.source_location_id == self.location_id,
+                    Picking.dest_location_id == self.location_id,
+                )
+            )
+        if self.warehouse_id:
+            in_warehouse = select(Location.id).where(
+                Location.warehouse_id == self.warehouse_id
+            )
+            query = query.where(
+                or_(
+                    Picking.source_location_id.in_(in_warehouse),
+                    Picking.dest_location_id.in_(in_warehouse),
+                )
+            )
+        if self.category_id:
+            query = query.where(
+                Picking.id.in_(
+                    select(PickingLine.picking_id)
+                    .join(Product)
+                    .where(Product.category_id == self.category_id)
+                )
+            )
+        if self.search:
+            pattern = f"%{self.search}%"
+            query = query.where(
+                or_(
+                    Picking.reference.ilike(pattern),
+                    Picking.partner_id.in_(
+                        select(Partner.id).where(Partner.name.ilike(pattern))
+                    ),
+                )
+            )
+        return query
+
+
+Filters = Annotated[PickingFilters, Depends()]
+
+
 def _out(p: Picking, available: dict[int, bool] | None = None) -> PickingOut:
     available = available or {}
     return PickingOut(
@@ -74,9 +132,9 @@ def _out(p: Picking, available: dict[int, bool] | None = None) -> PickingOut:
         partner_id=p.partner_id,
         partner_name=p.partner.name if p.partner else None,
         source_location_id=p.source_location_id,
-        source_location_name=p.source_location.name,
+        source_location_name=p.source_location.full_name,
         dest_location_id=p.dest_location_id,
-        dest_location_name=p.dest_location.name,
+        dest_location_name=p.dest_location.full_name,
         schedule_date=p.schedule_date,
         responsible_id=p.responsible_id,
         responsible_name=p.responsible.name,
@@ -103,16 +161,8 @@ def _get(db: Session, picking_id: int, lock: bool = False) -> Picking:
 
 
 @router.get("", response_model=list[PickingOut])
-def list_pickings(
-    db: DB,
-    type: PickingType | None = None,
-    status: PickingStatus | None = None,
-):
-    query = select(Picking).order_by(Picking.id.desc())
-    if type:
-        query = query.where(Picking.type == type)
-    if status:
-        query = query.where(Picking.status == status)
+def list_pickings(db: DB, filters: Filters):
+    query = filters.apply(select(Picking).order_by(Picking.id.desc()))
     return [_out(p) for p in db.scalars(query)]
 
 
@@ -120,7 +170,7 @@ def list_pickings(
 def create_picking(
     body: PickingCreate,
     db: DB,
-    user: Annotated[User, Depends(get_current_user)],
+    user: CurrentUser,
 ):
     picking = engine.create_picking(
         db, body.type, user.id, **body.model_dump(exclude={"type"})
