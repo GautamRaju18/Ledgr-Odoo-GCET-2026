@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Strip any AI attribution lines from commit messages.
+msg_file="$1"
+grep -viE '^(co-authored-by:.*(claude|anthropic)|.*generated with.*claude)' "$msg_file" > "$msg_file.tmp"
+mv "$msg_file.tmp" "$msg_file"
