@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import { LayoutGrid, List, Plus } from 'lucide-react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { pickings } from '../../api/pickings'
-import { categories, warehouses } from '../../api/resources'
+import { categories, locations, warehouses } from '../../api/resources'
 import { cx } from '../../components/common/format'
 import { Button, PageHeader, SearchInput, Select } from '../../components/common/ui'
 import KanbanBoard from '../../components/operations/KanbanBoard'
 import OperationList from '../../components/operations/OperationList'
 import { FLOW, KINDS, STATUS } from './kinds'
 
-const FILTERS = ['search', 'status', 'warehouse_id', 'category_id']
+const FILTERS = ['search', 'status', 'warehouse_id', 'location_id', 'category_id']
 
 export default function OperationListPage({ kind }) {
   const cfg = KINDS[kind]
@@ -35,6 +35,10 @@ export default function OperationListPage({ kind }) {
   const { data: whs = [] } = useQuery({
     queryKey: ['warehouses'],
     queryFn: () => warehouses.list(),
+  })
+  const { data: locs = [] } = useQuery({
+    queryKey: ['locations'],
+    queryFn: () => locations.list(),
   })
   const { data: cats = [] } = useQuery({
     queryKey: ['categories'],
@@ -76,6 +80,20 @@ export default function OperationListPage({ kind }) {
               {w.short_code}
             </option>
           ))}
+        </Select>
+        <Select
+          className="w-auto"
+          value={filters.location_id ?? ''}
+          onChange={(e) => set('location_id', e.target.value)}
+        >
+          <option value="">All locations</option>
+          {locs
+            .filter((l) => l.type === 'internal')
+            .map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.full_name}
+              </option>
+            ))}
         </Select>
         <Select
           className="w-auto"
