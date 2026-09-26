@@ -30,7 +30,8 @@ def _send(email: str, code: str) -> None:
                 settings.smtp_host, settings.smtp_port, timeout=10
             ) as smtp:
                 smtp.starttls()
-                smtp.login(settings.smtp_user, settings.smtp_password)
+                # Google shows app passwords in groups of 4; the spaces aren't part of it.
+                smtp.login(settings.smtp_user, settings.smtp_password.replace(" ", ""))
                 smtp.send_message(msg)
             return
         except (smtplib.SMTPException, OSError):
