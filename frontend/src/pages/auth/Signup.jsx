@@ -16,7 +16,6 @@ const schema = z
       .min(6, 'Login ID must be 6-12 characters')
       .max(12, 'Login ID must be 6-12 characters')
       .regex(/^\S+$/, 'No spaces'),
-    name: z.string().min(1, 'Enter your name'),
     email: z.email('Enter a valid email'),
     password,
     confirm: z.string(),
@@ -55,9 +54,6 @@ export default function Signup() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field label="Login ID" error={errors.login_id}>
           <Input autoFocus autoComplete="username" {...register('login_id')} />
-        </Field>
-        <Field label="Name" error={errors.name}>
-          <Input autoComplete="name" {...register('name')} />
         </Field>
         <Field label="Email" error={errors.email}>
           <Input type="email" autoComplete="email" {...register('email')} />
