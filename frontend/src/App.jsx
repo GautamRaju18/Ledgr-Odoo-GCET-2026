@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router'
+import { Navigate, Route, Routes, useLocation } from 'react-router'
 import { auth } from './api/client'
 import AppLayout from './components/layout/AppLayout'
 import ForgotPassword from './pages/auth/ForgotPassword'
@@ -17,6 +17,7 @@ import Adjustments from './pages/stock/Adjustments'
 import Stock from './pages/stock/Stock'
 
 function RequireAuth() {
+  useLocation() // re-check the token on every navigation (e.g. logged out in another tab)
   return auth.token() ? <AppLayout /> : <Navigate to="/login" replace />
 }
 

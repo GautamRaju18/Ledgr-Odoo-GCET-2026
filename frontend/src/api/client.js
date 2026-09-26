@@ -17,7 +17,8 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401 && auth.token()) {
+    // Session missing or expired: back to login (auth screens show their own errors).
+    if (err.response?.status === 401 && !err.config.url.startsWith('/auth/')) {
       auth.clear()
       window.location.assign('/login')
     }
