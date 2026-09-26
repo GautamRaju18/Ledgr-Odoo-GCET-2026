@@ -13,6 +13,7 @@ import ProductForm from './pages/products/ProductForm'
 import ProductList from './pages/products/ProductList'
 import Profile from './pages/profile/Profile'
 import { Categories, Contacts, Locations, Warehouses } from './pages/settings/Settings'
+import Adjustments from './pages/stock/Adjustments'
 import Stock from './pages/stock/Stock'
 
 function RequireAuth() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<ProductForm />} />
         <Route path="/stock" element={<Stock />} />
+        <Route path="/operations/adjustments" element={<Adjustments />} />
         <Route path="/move-history" element={<MoveHistory />} />
         <Route path="/settings/warehouses" element={<Warehouses />} />
         <Route path="/settings/locations" element={<Locations />} />

@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Check, Pencil, X } from 'lucide-react'
+import { Check, ClipboardCheck, Pencil, X } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { errorMessage } from '../../api/client'
 import { categories, locations, stock, warehouses } from '../../api/resources'
 import { fmtMoney, fmtQty } from '../../components/common/format'
 import StockBadge from '../../components/common/StockBadge'
-import { Input, PageHeader, SearchInput, Select, Table } from '../../components/common/ui'
+import { Button, Input, PageHeader, SearchInput, Select, Table } from '../../components/common/ui'
 
 const countSchema = z.object({
   counted: z.coerce.number({ error: 'Enter a number' }).min(0, 'Cannot be negative'),
@@ -66,6 +67,7 @@ function AdjustForm({ row, onDone }) {
 }
 
 export default function Stock() {
+  const navigate = useNavigate()
   const [filters, setFilters] = useState({})
   const [editing, setEditing] = useState(null)
   const set = (key) => (value) => setFilters({ ...filters, [key]: value || undefined })
@@ -136,6 +138,9 @@ export default function Stock() {
   return (
     <>
       <PageHeader title="Stock">
+        <Button variant="secondary" onClick={() => navigate('/operations/adjustments')}>
+          <ClipboardCheck className="size-4" /> Adjust stock
+        </Button>
         <SearchInput
           value={filters.search}
           onChange={set('search')}
