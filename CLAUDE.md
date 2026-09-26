@@ -9,7 +9,7 @@ You are the coding assistant for a 4-person team building **StockSense**, a modu
 1. Ask: **"Which team member are you? (P1, P2, P3 or P4)"** unless the user already said so.
 2. Run `git config user.name` and `git config user.email`. They must match that member's row in Section 2. If they don't, stop and tell the user the exact commands to fix it. Do not commit until they match.
 3. Run `git config core.hooksPath` and confirm it prints `.githooks`. If not, run `git config core.hooksPath .githooks`.
-4. Check out that member's branch (Section 3). Pull the latest `main` and rebase onto it.
+4. Check out `main` and run `git pull --rebase` (Section 3).
 5. Tell the user which phase (Section 9) they are in and list their tasks for that phase.
 6. Work only on files that member owns (Section 2). If a change is needed in another member's area, stop and tell the user what to ask that teammate for. Never edit another member's files.
 
@@ -40,7 +40,7 @@ Shared files (`backend/app/models/__init__.py`, `schemas/__init__.py`, `frontend
 
 ## 3. Git and commit rules (strict)
 
-**Branches:** `p1/stock-engine`, `p2/backend-core`, `p3/operations-ui`, `p4/app-ui`. Never commit directly to `main`.
+**Branches:** `main` is the only branch. Never create other branches, locally or on GitHub. Everyone commits to `main`.
 
 **Identity:** every commit must be authored and committed by the member running the session, using their own `git config` identity from Section 2. Never use `--author`, `-c user.name`, `-c user.email`, or environment variables to commit as anyone else.
 
@@ -56,7 +56,7 @@ Shared files (`backend/app/models/__init__.py`, `schemas/__init__.py`, `frontend
 - Imperative mood, under 72 characters, no trailers, no body unless needed to explain a decision.
 - Before each commit: run the formatter/linter for that side and make sure the app still starts.
 
-**Merging:** at each checkpoint in Section 9, the member pushes their branch and opens a PR to `main` with `gh pr create` (plain title and 1–3 line description, no footer). The same member merges their own PR after P1 approves on GitHub. On conflicts in files you don't own, stop and ask the user to coordinate with the owner.
+**Syncing:** before each commit run `git pull --rebase`; push to `main` right after each commit. Never force-push. Because members only touch files they own, rebases should be conflict-free; on conflicts in files you don't own, stop and ask the user to coordinate with the owner.
 
 ---
 
@@ -237,14 +237,14 @@ Layout (P4): left sidebar with Dashboard, Products, Stock, Operations (Receipts,
 
 ## 10. Phase plan (8 hours)
 
-Commit after every task. Push and open/merge PRs at each ✅ checkpoint.
+Commit and push to `main` after every task. At each ✅ checkpoint, everyone pulls and checks the app still runs.
 
 ### Phase 0 — 0:00–0:30 · Setup (all together)
 - **P1:** create repo, `main` branch, root files (`docker-compose.yml`, `.gitignore`, `.claude/settings.json`, `.githooks/commit-msg`, `README.md`, this `CLAUDE.md`), backend skeleton folders; add P2–P4 as collaborators.
 - **P2:** backend `requirements.txt`, `config.py`, `database.py`, Alembic init.
 - **P3:** review Sections 7–9 and draft mock data for pickings in `api/pickings.js`.
 - **P4:** Vite + Tailwind + Router + TanStack Query setup, `api/client.js` with JWT interceptor.
-- ✅ Checkpoint: everyone merges; all four machines run Postgres, backend and frontend.
+- ✅ Checkpoint: everyone pulls `main`; all four machines run Postgres, backend and frontend.
 
 ### Phase 1 — 0:30–2:00 · Foundations
 - **P1:** picking, picking_line, move, quant, sequence models; reference generator; migration.
@@ -280,7 +280,7 @@ Commit after every task. Push and open/merge PRs at each ✅ checkpoint.
 - ✅ Checkpoint at 7:30.
 
 ### Phase 6 — 7:30–8:00 · Freeze
-- **P1:** README (setup steps, features, team roles), final merge, tag `v1.0`.
+- **P1:** README (setup steps, features, team roles), tag `v1.0`.
 - **Others:** final small fixes only; rehearse demo.
 - No new features after 7:30.
 
