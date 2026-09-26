@@ -90,7 +90,7 @@ def seed() -> None:
             User(
                 login_id="demo01",
                 name="Demo User",
-                email="demo@example.com",
+                email="ledgr.stocksense@gmail.com",
                 password_hash=hash_secret("Demo@1234"),
             )
         )
