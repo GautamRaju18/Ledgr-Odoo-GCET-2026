@@ -10,7 +10,7 @@ Modular Inventory Management System: FastAPI + React + PostgreSQL.
 - Receipts, delivery orders (with availability check) and internal transfers: Draft → (Waiting) → Ready → Done, list and kanban views, print
 - Stock page with free-to-use quantities and inline stock adjustment
 - Inventory adjustments: count any product at any location; the difference is logged as `WH/ADJ/xxxx`
-- Move history (stock ledger): incoming green, outgoing red
+- Move history: done moves (stock ledger) plus planned lines of open operations; incoming green, outgoing red; list and kanban by status
 - Multi-warehouse settings: warehouses, locations, categories, contacts
 - Low stock alerts on the dashboard, product and stock pages, and after login
 
