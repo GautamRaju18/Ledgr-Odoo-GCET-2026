@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError
 
-from app.routers import auth, master_data, pickings, products
+from app.routers import auth, master_data, pickings, products, stock, users
 
 app = FastAPI(title="StockSense")
 
@@ -16,5 +16,6 @@ def integrity_error(request: Request, exc: IntegrityError) -> JSONResponse:
     )
 
 
-for router in (auth.router, pickings.router, products.router, *master_data.routers):
+ROUTERS = (auth, users, pickings, products, stock)
+for router in (*(m.router for m in ROUTERS), *master_data.routers):
     app.include_router(router, prefix="/api")
