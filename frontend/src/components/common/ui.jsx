@@ -23,14 +23,15 @@ export function Button({ variant = 'primary', type = 'button', className, ...pro
 }
 
 const FIELD =
-  'w-full rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none disabled:bg-slate-100 disabled:text-slate-500'
+  'rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none disabled:bg-slate-100 disabled:text-slate-500'
 
-export const Input = ({ className, ...props }) => (
-  <input className={cx(FIELD, className)} {...props} />
-)
+// Full width unless the caller sets its own width (two w-* classes would clash).
+const field = (className) => cx(FIELD, !/(^|\s)w-/.test(className ?? '') && 'w-full', className)
+
+export const Input = ({ className, ...props }) => <input className={field(className)} {...props} />
 
 export const Select = ({ className, children, ...props }) => (
-  <select className={cx(FIELD, className)} {...props}>
+  <select className={field(className)} {...props}>
     {children}
   </select>
 )
