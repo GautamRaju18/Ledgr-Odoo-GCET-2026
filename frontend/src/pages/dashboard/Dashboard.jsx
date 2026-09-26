@@ -121,6 +121,20 @@ export default function Dashboard() {
         <Loading />
       ) : (
         <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <OperationCard
+              title="Receipt"
+              card={{ ...k.receipts, waiting: undefined }}
+              verb="receive"
+              to="/operations/receipts"
+            />
+            <OperationCard
+              title="Delivery"
+              card={k.deliveries}
+              verb="deliver"
+              to="/operations/deliveries"
+            />
+          </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Kpi
               label="Products in Stock"
@@ -159,20 +173,6 @@ export default function Dashboard() {
               value={k.internal_transfers_scheduled}
               icon={ArrowLeftRight}
               to="/operations/transfers"
-            />
-          </div>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <OperationCard
-              title="Receipts"
-              card={{ ...k.receipts, waiting: undefined }}
-              verb="receive"
-              to="/operations/receipts"
-            />
-            <OperationCard
-              title="Delivery Orders"
-              card={k.deliveries}
-              verb="deliver"
-              to="/operations/deliveries"
             />
           </div>
         </div>

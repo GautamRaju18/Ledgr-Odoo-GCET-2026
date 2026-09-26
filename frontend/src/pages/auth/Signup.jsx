@@ -42,12 +42,12 @@ export default function Signup() {
 
   return (
     <AuthCard
-      title="Create account"
+      title="Sign Up"
       footer={
         <>
           Already registered?{' '}
           <Link to="/login" className="font-medium text-brand">
-            Log in
+            Sign In
           </Link>
         </>
       }
@@ -65,11 +65,11 @@ export default function Signup() {
         <Field label="Password" error={errors.password}>
           <Input type="password" autoComplete="new-password" {...register('password')} />
         </Field>
-        <Field label="Confirm password" error={errors.confirm}>
+        <Field label="Re-Enter Password" error={errors.confirm}>
           <Input type="password" autoComplete="new-password" {...register('confirm')} />
         </Field>
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          Sign up
+          Sign Up
         </Button>
       </form>
     </AuthCard>

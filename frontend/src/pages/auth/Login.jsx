@@ -32,17 +32,7 @@ export default function Login() {
   }
 
   return (
-    <AuthCard
-      title="Log in"
-      footer={
-        <>
-          New here?{' '}
-          <Link to="/signup" className="font-medium text-brand">
-            Sign up
-          </Link>
-        </>
-      }
-    >
+    <AuthCard title="Sign In">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field label="Login ID" error={errors.login_id}>
           <Input autoFocus autoComplete="username" {...register('login_id')} />
@@ -51,11 +41,13 @@ export default function Login() {
           <Input type="password" autoComplete="current-password" {...register('password')} />
         </Field>
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          Log in
+          Sign In
         </Button>
-        <Link to="/forgot-password" className="block text-center text-sm text-brand">
-          Forgot password?
-        </Link>
+        <p className="text-center text-sm text-brand">
+          <Link to="/forgot-password">Forgot Password?</Link>
+          <span className="px-2 text-slate-300">|</span>
+          <Link to="/signup">Sign Up</Link>
+        </p>
       </form>
     </AuthCard>
   )
