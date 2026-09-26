@@ -4,9 +4,16 @@ import AppLayout from './components/layout/AppLayout'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
+import Dashboard from './pages/dashboard/Dashboard'
+import MoveHistory from './pages/moves/MoveHistory'
 import { KINDS } from './pages/operations/kinds'
 import OperationFormPage from './pages/operations/OperationFormPage'
 import OperationListPage from './pages/operations/OperationListPage'
+import ProductForm from './pages/products/ProductForm'
+import ProductList from './pages/products/ProductList'
+import Profile from './pages/profile/Profile'
+import { Categories, Contacts, Locations, Warehouses } from './pages/settings/Settings'
+import Stock from './pages/stock/Stock'
 
 function RequireAuth() {
   return auth.token() ? <AppLayout /> : <Navigate to="/login" replace />
@@ -19,7 +26,16 @@ export default function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<RequireAuth />}>
-        <Route path="/dashboard" element={null} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/:id" element={<ProductForm />} />
+        <Route path="/stock" element={<Stock />} />
+        <Route path="/move-history" element={<MoveHistory />} />
+        <Route path="/settings/warehouses" element={<Warehouses />} />
+        <Route path="/settings/locations" element={<Locations />} />
+        <Route path="/settings/categories" element={<Categories />} />
+        <Route path="/settings/contacts" element={<Contacts />} />
+        <Route path="/profile" element={<Profile />} />
         {Object.keys(KINDS).map((kind) => [
           <Route
             key={kind}

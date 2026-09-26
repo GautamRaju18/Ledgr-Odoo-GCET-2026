@@ -3,6 +3,7 @@ import {
   ArrowDownToLine,
   ArrowLeftRight,
   Boxes,
+  Contact,
   ChevronDown,
   History,
   LayoutDashboard,
@@ -10,6 +11,7 @@ import {
   MapPin,
   Menu,
   Package,
+  Tags,
   Truck,
   User,
   Warehouse,
@@ -38,6 +40,8 @@ const NAV = [
     children: [
       { to: '/settings/warehouses', label: 'Warehouses', icon: Warehouse },
       { to: '/settings/locations', label: 'Locations', icon: MapPin },
+      { to: '/settings/categories', label: 'Categories', icon: Tags },
+      { to: '/settings/contacts', label: 'Contacts', icon: Contact },
     ],
   },
 ]
