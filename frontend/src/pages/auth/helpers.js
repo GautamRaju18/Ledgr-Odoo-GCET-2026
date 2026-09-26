@@ -6,7 +6,7 @@ import { dashboard } from '../../api/resources'
 // Mirrors the backend rule in app/schemas/user.py.
 export const password = z
   .string()
-  .min(8, 'At least 8 characters')
+  .min(9, 'Must be more than 8 characters')
   .max(72, 'At most 72 characters')
   .regex(/[a-z]/, 'Add a lowercase letter')
   .regex(/[A-Z]/, 'Add an uppercase letter')
