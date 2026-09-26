@@ -5,10 +5,11 @@ Modular Inventory Management System: FastAPI + React + PostgreSQL.
 ## Features
 
 - Sign up, log in, OTP password reset
-- Dashboard: products in stock, low / out of stock, pending receipts, deliveries and transfers; late, waiting and upcoming operations; filters by warehouse, location and category
+- Dashboard: products in stock, low / out of stock, pending receipts, deliveries and transfers; late, waiting and upcoming operations; filters by operation type, status, warehouse, location and category
 - Products with categories, SKU search, per-location stock, reordering rules, optional initial stock
 - Receipts, delivery orders (with availability check) and internal transfers: Draft → (Waiting) → Ready → Done, list and kanban views, print
 - Stock page with free-to-use quantities and inline stock adjustment
+- Inventory adjustments: count any product at any location; the difference is logged as `WH/ADJ/xxxx`
 - Move history (stock ledger): incoming green, outgoing red
 - Multi-warehouse settings: warehouses, locations, categories, contacts
 - Low stock alerts on the dashboard, product and stock pages, and after login
