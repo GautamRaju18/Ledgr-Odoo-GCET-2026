@@ -6,7 +6,11 @@ Run on a fresh database from backend/:
 """
 
 import logging
+import os
 import re
+
+# Read OTPs from the console instead of emailing the fake test addresses.
+os.environ["SMTP_USER"] = ""
 
 from fastapi.testclient import TestClient
 
