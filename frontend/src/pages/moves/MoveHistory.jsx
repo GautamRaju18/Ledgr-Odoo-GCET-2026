@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { LayoutGrid, List } from 'lucide-react'
 import { useState } from 'react'
 import { moves } from '../../api/resources'
-import { cx, fmtQty } from '../../components/common/format'
-import { Badge, Loading, PageHeader, SearchInput, Table } from '../../components/common/ui'
+import { OPERATION_TYPES, cx, fmtQty } from '../../components/common/format'
+import { Badge, Loading, PageHeader, SearchInput, Select, Table } from '../../components/common/ui'
 
 // Incoming stock green, outgoing red.
 const DIRECTION = {
@@ -17,8 +17,9 @@ const qty = (m) => `${DIRECTION[m.direction].sign}${fmtQty(m.quantity)} ${m.uom}
 
 export default function MoveHistory() {
   const [search, setSearch] = useState('')
+  const [type, setType] = useState('')
   const [view, setView] = useState('list')
-  const params = { search: search || undefined }
+  const params = { search: search || undefined, type: type || undefined }
   const { data = [], isLoading } = useQuery({
     queryKey: ['moves', params],
     queryFn: () => moves.list(params),
@@ -39,6 +40,14 @@ export default function MoveHistory() {
     <>
       <PageHeader title="Move History">
         <SearchInput value={search} onChange={setSearch} placeholder="Reference or contact" />
+        <Select className="w-auto" value={type} onChange={(e) => setType(e.target.value)}>
+          <option value="">All operations</option>
+          {Object.entries(OPERATION_TYPES).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </Select>
         <div className="flex rounded-md border border-slate-300 bg-white">
           {[
             ['list', List],

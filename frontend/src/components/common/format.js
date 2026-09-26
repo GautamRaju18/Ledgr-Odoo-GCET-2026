@@ -4,3 +4,10 @@ export const fmtQty = (n) => Number(n ?? 0).toLocaleString(undefined, { maximumF
 export const fmtMoney = (n) =>
   Number(n ?? 0).toLocaleString(undefined, { style: 'currency', currency: 'INR' })
 export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : '')
+
+export const OPERATION_TYPES = {
+  receipt: 'Receipts',
+  delivery: 'Delivery',
+  internal: 'Internal',
+  adjustment: 'Adjustments',
+}

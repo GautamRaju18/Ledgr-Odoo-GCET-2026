@@ -10,8 +10,9 @@ import {
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { categories, dashboard, locations, warehouses } from '../../api/resources'
-import { cx } from '../../components/common/format'
+import { OPERATION_TYPES, cx } from '../../components/common/format'
 import { Card, Loading, PageHeader, Select } from '../../components/common/ui'
+import { STATUS } from '../operations/kinds'
 
 function Kpi({ label, value, icon: Icon, tone = 'text-brand', to }) {
   return (
@@ -73,6 +74,22 @@ export default function Dashboard() {
   return (
     <>
       <PageHeader title="Inventory Dashboard">
+        <Select className="w-auto" onChange={set('type')}>
+          <option value="">All operations</option>
+          {Object.entries(OPERATION_TYPES).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </Select>
+        <Select className="w-auto" onChange={set('status')}>
+          <option value="">All statuses</option>
+          {Object.entries(STATUS).map(([value, { label }]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </Select>
         <Select className="w-auto" onChange={set('warehouse_id')}>
           <option value="">All warehouses</option>
           {whs.map((w) => (
