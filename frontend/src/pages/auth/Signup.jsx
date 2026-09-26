@@ -31,7 +31,7 @@ export default function Signup() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) })
 
-  const onSubmit = async ({ confirm: _, ...values }) => {
+  const onSubmit = async (values) => {
     try {
       const { access_token } = await signup(values)
       await startSession(access_token, navigate)
