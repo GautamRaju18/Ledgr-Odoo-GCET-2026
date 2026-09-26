@@ -117,47 +117,58 @@ function OperationForm({ kind, cfg, picking, productList, locationList, partnerL
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        {picking && (
+          <Button
+            variant="secondary"
+            className="no-print"
+            onClick={() => navigate(`/operations/${kind}/new`)}
+          >
+            New
+          </Button>
+        )}
         <div className="text-sm text-slate-500">
           <Link to={`/operations/${kind}`} className="text-brand hover:underline">
             {cfg.title}
           </Link>{' '}
           / <span className="font-semibold text-slate-800">{picking?.reference ?? 'New'}</span>
         </div>
-        <StatusBar type={cfg.type} status={status} />
       </div>
 
-      <div className="no-print flex flex-wrap gap-2">
-        {editable && (
-          <>
-            <Button disabled={busy} onClick={() => save('todo')}>
-              To Do
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="no-print flex flex-wrap gap-2">
+          {editable && (
+            <>
+              <Button disabled={busy} onClick={() => save('todo')}>
+                To Do
+              </Button>
+              <Button variant="secondary" disabled={busy} onClick={() => save()}>
+                Save
+              </Button>
+            </>
+          )}
+          {status === 'waiting' && (
+            <Button disabled={busy} onClick={() => act('check-availability')}>
+              Check Availability
             </Button>
-            <Button variant="secondary" disabled={busy} onClick={() => save()}>
-              Save
+          )}
+          {status === 'ready' && (
+            <Button disabled={busy} onClick={() => act('validate')}>
+              Validate
             </Button>
-          </>
-        )}
-        {status === 'waiting' && (
-          <Button disabled={busy} onClick={() => act('check-availability')}>
-            Check Availability
-          </Button>
-        )}
-        {status === 'ready' && (
-          <Button disabled={busy} onClick={() => act('validate')}>
-            Validate
-          </Button>
-        )}
-        {status === 'done' && (
-          <Button variant="secondary" onClick={() => window.print()}>
-            <Printer className="size-4" /> Print
-          </Button>
-        )}
-        {picking && ['draft', 'waiting', 'ready'].includes(status) && (
-          <Button variant="danger" disabled={busy} onClick={() => act('cancel')}>
-            Cancel
-          </Button>
-        )}
+          )}
+          {status === 'done' && (
+            <Button variant="secondary" onClick={() => window.print()}>
+              <Printer className="size-4" /> Print
+            </Button>
+          )}
+          {picking && ['draft', 'waiting', 'ready'].includes(status) && (
+            <Button variant="danger" disabled={busy} onClick={() => act('cancel')}>
+              Cancel
+            </Button>
+          )}
+        </div>
+        <StatusBar type={cfg.type} status={status} />
       </div>
 
       <Card>
@@ -200,6 +211,7 @@ function OperationForm({ kind, cfg, picking, productList, locationList, partnerL
         </fieldset>
       </Card>
 
+      <h3 className="font-semibold text-slate-700">Products</h3>
       <ProductLinesTable
         form={form}
         products={productList}
