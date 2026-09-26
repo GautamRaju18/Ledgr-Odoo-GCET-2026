@@ -51,7 +51,7 @@ export default function Signup() {
         </>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field label="Login ID" error={errors.login_id}>
           <Input autoFocus autoComplete="username" {...register('login_id')} />
         </Field>

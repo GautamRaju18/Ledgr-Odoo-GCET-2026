@@ -80,6 +80,7 @@ export default function CrudPage({
       {editing && (
         <Card className="mb-4">
           <form
+            noValidate
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid items-end gap-3 sm:grid-cols-4"
           >

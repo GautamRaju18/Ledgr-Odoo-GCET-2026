@@ -38,7 +38,7 @@ function AdjustForm({ row, onDone }) {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex items-center gap-1">
+    <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex items-center gap-1">
       <Input
         type="number"
         step="0.01"

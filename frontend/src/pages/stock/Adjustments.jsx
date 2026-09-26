@@ -50,7 +50,11 @@ function CountForm({ productList, locationList }) {
 
   return (
     <Card>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid items-end gap-3 sm:grid-cols-4">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid items-end gap-3 sm:grid-cols-4"
+      >
         <Field label="Product" error={errors.product_id}>
           <Select {...form.register('product_id')}>
             <option value="">Select product…</option>

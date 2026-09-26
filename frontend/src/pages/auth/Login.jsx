@@ -33,7 +33,7 @@ export default function Login() {
 
   return (
     <AuthCard title="Sign In">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field label="Login ID" error={errors.login_id}>
           <Input autoFocus autoComplete="username" {...register('login_id')} />
         </Field>

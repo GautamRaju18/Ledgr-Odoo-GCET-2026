@@ -34,7 +34,7 @@ function EmailStep({ onSent }) {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Field label="Registered email" error={errors.email}>
         <Input type="email" autoFocus {...register('email')} />
       </Field>
@@ -61,7 +61,7 @@ function ResetStep({ email }) {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <p className="text-sm text-slate-500">
         Enter the code sent to <b>{email}</b>. It expires in 10 minutes.
       </p>

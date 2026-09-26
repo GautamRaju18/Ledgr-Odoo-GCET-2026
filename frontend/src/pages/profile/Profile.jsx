@@ -32,7 +32,7 @@ function ProfileForm({ user }) {
   }
   return (
     <Card className="max-w-lg">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field label="Login ID">
           <Input value={user.login_id} disabled readOnly />
         </Field>

@@ -92,7 +92,11 @@ function ReorderRules({ product, whs }) {
         rows={product.reorder_rules}
         empty="No reordering rules. Low stock alerts need one."
       />
-      <form onSubmit={form.handleSubmit(add)} className="mt-3 grid items-end gap-3 sm:grid-cols-4">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(add)}
+        className="mt-3 grid items-end gap-3 sm:grid-cols-4"
+      >
         <Field label="Warehouse" error={errors.warehouse_id}>
           <Select {...form.register('warehouse_id')}>
             <option value="">—</option>
@@ -142,7 +146,7 @@ function ProductFields({ product, cats, locs }) {
   }
   return (
     <Card>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
+      <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
         <Field label="Product Name" error={errors.name}>
           <Input {...form.register('name')} />
         </Field>
