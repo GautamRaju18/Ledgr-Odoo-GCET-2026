@@ -82,7 +82,7 @@ def _move(
         if quant.quantity < qty:
             name = db.get(Product, product_id).name
             raise StockError(
-                f"Not enough {name} at {src.name}: "
+                f"Not enough {name} at {src.full_name}: "
                 f"{quant.quantity} on hand, {qty} needed"
             )
         quant.quantity -= qty
