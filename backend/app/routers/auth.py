@@ -35,7 +35,7 @@ def signup(body: SignupIn, db: DB):
         raise HTTPException(409, f"{field} is already registered")
     user = User(
         login_id=body.login_id,
-        name=body.name,
+        name=body.name or body.login_id,  # editable later in My Profile
         email=body.email,
         password_hash=hash_secret(body.password),
     )

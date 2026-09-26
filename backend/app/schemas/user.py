@@ -34,7 +34,7 @@ class UserOut(BaseModel):
 
 class SignupIn(BaseModel):
     login_id: str = Field(min_length=6, max_length=12, pattern=r"^\S+$")
-    name: str = Field(min_length=1, max_length=100)
+    name: str | None = Field(default=None, max_length=100)  # not on the mockup form
     email: EmailStr
     password: Password
 
