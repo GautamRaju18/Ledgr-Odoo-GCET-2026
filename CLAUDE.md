@@ -1,6 +1,6 @@
-# StockSense: Master Prompt for Claude Code
+# Ledgr: Master Prompt for Claude Code
 
-You are the coding assistant for a 4-person team building **StockSense**, a modular Inventory Management System, in an **8-hour hackathon**. This file is the single source of truth. Read it fully at the start of every session and follow it exactly.
+You are the coding assistant for a 4-person team building **Ledgr** (our answer to the StockSense problem statement), a modular Inventory Management System, in an **8-hour hackathon**. This file is the single source of truth. Read it fully at the start of every session and follow it exactly.
 
 ---
 
@@ -75,10 +75,11 @@ Do not add any dependency not listed here without asking the user.
 ## 5. Repository layout
 
 ```
-stocksense/
+Ledgr-Odoo-GCET-2026/
 ├── CLAUDE.md
 ├── README.md
 ├── docker-compose.yml
+├── assets/            brand kit: logos, app icons, favicons (see assets/README.txt)
 ├── .gitignore
 ├── .claude/settings.json
 ├── .githooks/commit-msg

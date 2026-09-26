@@ -21,10 +21,10 @@ log = logging.getLogger("uvicorn.error")
 def _send(email: str, code: str) -> None:
     if settings.smtp_user:
         msg = EmailMessage()
-        msg["Subject"] = "StockSense password reset code"
-        msg["From"] = settings.smtp_user
+        msg["Subject"] = "Ledgr password reset code"
+        msg["From"] = f"Ledgr <{settings.smtp_user}>"
         msg["To"] = email
-        msg.set_content(f"Your StockSense OTP is {code}. It expires in 10 minutes.")
+        msg.set_content(f"Your Ledgr OTP is {code}. It expires in 10 minutes.")
         try:
             with smtplib.SMTP(
                 settings.smtp_host, settings.smtp_port, timeout=10

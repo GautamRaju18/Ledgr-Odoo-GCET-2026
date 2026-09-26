@@ -13,7 +13,7 @@ from app.routers import (
     users,
 )
 
-app = FastAPI(title="StockSense")
+app = FastAPI(title="Ledgr")
 
 
 @app.exception_handler(IntegrityError)

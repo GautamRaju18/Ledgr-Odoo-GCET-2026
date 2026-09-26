@@ -1,6 +1,10 @@
-# StockSense
+# Ledgr
 
-Modular Inventory Management System: FastAPI + React + PostgreSQL.
+![Ledgr](assets/PNG/ledgr-logo-primary-800px.png)
+
+Modular Inventory Management System for the Odoo x GCET 2026 hackathon (problem statement: StockSense). FastAPI + React + PostgreSQL.
+
+Brand kit (logos, app icons, favicons) lives in `assets/`; see `assets/README.txt` for which file to use where.
 
 ## Features
 

@@ -1,9 +1,11 @@
+import logo from '../../assets/ledgr-logo-primary.svg'
+
 export default function AuthCard({ title, children, footer }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <div className="text-2xl font-bold text-brand">StockSense</div>
+          <img src={logo} alt="Ledgr" className="mx-auto mb-1 h-12" />
           <div className="text-sm text-slate-500">Inventory Management</div>
         </div>
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">

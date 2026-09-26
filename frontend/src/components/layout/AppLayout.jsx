@@ -21,6 +21,7 @@ import { useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router'
 import { auth } from '../../api/client'
 import { me } from '../../api/resources'
+import logo from '../../assets/ledgr-logo-white.svg'
 import { cx } from '../common/format'
 
 const NAV = [
@@ -121,7 +122,7 @@ export default function AppLayout() {
           menuOpen ? 'block' : 'hidden',
         )}
       >
-        <div className="mb-6 px-3 pt-2 text-lg font-bold text-white">StockSense</div>
+        <img src={logo} alt="Ledgr" className="mb-6 ml-3 h-8 pt-2" />
         <nav className="space-y-1">
           {NAV.map((item) =>
             item.children ? (
