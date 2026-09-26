@@ -1,11 +1,18 @@
 import enum
 from datetime import date, datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from sqlalchemy import CheckConstraint, DateTime, Enum, ForeignKey, Numeric, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.location import Location
+    from app.models.partner import Partner
+    from app.models.product import Product
+    from app.models.user import User
 
 
 class PickingType(str, enum.Enum):
@@ -43,9 +50,21 @@ class Picking(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
+    # selectin (not joined) keeps SELECT ... FOR UPDATE on pickings valid.
     lines: Mapped[list["PickingLine"]] = relationship(
-        back_populates="picking", cascade="all, delete-orphan"
+        back_populates="picking",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by="PickingLine.id",
     )
+    partner: Mapped["Partner | None"] = relationship(lazy="selectin")
+    source_location: Mapped["Location"] = relationship(
+        foreign_keys=[source_location_id], lazy="selectin"
+    )
+    dest_location: Mapped["Location"] = relationship(
+        foreign_keys=[dest_location_id], lazy="selectin"
+    )
+    responsible: Mapped["User"] = relationship(lazy="selectin")
 
 
 class PickingLine(Base):
@@ -65,3 +84,4 @@ class PickingLine(Base):
     )
 
     picking: Mapped[Picking] = relationship(back_populates="lines")
+    product: Mapped["Product"] = relationship(lazy="selectin")
